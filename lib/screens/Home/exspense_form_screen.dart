@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:madhouse_budgeter/constants.dart';
 import 'package:madhouse_budgeter/model/transaction.dart';
+import 'package:madhouse_budgeter/model/category.dart';
 
 class ExpenseFormScreen extends StatefulWidget{
 
@@ -20,8 +21,31 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen>{
   final TextEditingController _dateInput = new TextEditingController();
   IconData _dropdownValue;
   List<Map> _myCategory = [{"icon":Icon(Icons.alarm),"name":"Alarm"},{"icon":Icon(Icons.ac_unit),"name":"AC Unit"}];
-
-
+  List<Category> _categories = [
+    Category('Food', Icons.food_bank_outlined),
+    Category('Bills', Icons.payment_outlined),
+    Category('Transportation', Icons.directions_bus),
+    Category('Home', Icons.house),
+    Category('Car', Icons.directions_car_outlined),
+    Category('Entertainment', Icons.videogame_asset_outlined),
+    Category('Shopping', Icons.shopping_bag_outlined),
+    Category('Insurance', Icons.shield),
+    Category('Tax', Icons.receipt_long_outlined),
+    Category('Telephone', Icons.phone_outlined),
+    Category('Cigarette', Icons.smoking_rooms_outlined),
+    Category('Health', Icons.medical_services_outlined),
+    Category('Sport', Icons.sports_football_outlined),
+    Category('Baby', Icons.baby_changing_station_outlined),
+    Category('Pet', Icons.pets_outlined),
+    Category('Electronics', Icons.electrical_services_outlined),
+    Category('Wine', Icons.wine_bar_outlined),
+    Category('Snacks', Icons.cake_outlined),
+    Category('Social', Icons.people),
+    Category('Travel', Icons.airplanemode_active_outlined),
+    Category('Eduation', Icons.menu_book_outlined),
+    Category('Office', Icons.work_outline),
+    Category('Other', Icons.menu_outlined),
+  ];
 
   DateFormat _dateFormatter = DateFormat('yyyy-MM-dd');
 
@@ -82,10 +106,10 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen>{
                         _dropdownValue = value;
                       });
                     },
-                    items: _myCategory.map((Map map) {
+                    items: _categories.map((Category map) {
                       return new DropdownMenuItem(
-                        value: new Text(map["name"]),
-                        child: map["icon"],
+                        value: Text(map.name),
+                        child: Icon(map.icon),
                       );
                     }).toList(),
                   ),
@@ -165,6 +189,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen>{
                     },
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Padding(
                         padding: EdgeInsets.only(top: screenSize.height*0.05),
@@ -188,14 +213,6 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen>{
                         child:ElevatedButton(
                           onPressed: () {
                             // Validate returns true if the form is valid, otherwise false.
-                            if (_formKey.currentState.validate()) {
-                              // If the form is valid, display a snackbar. In the real world,
-                              // you'd often call a server or save the information in a database.
-
-                              Scaffold
-                                  .of(context)
-                                  .showSnackBar(SnackBar(content: Text('Processing Data')));
-                            }
                           },
                           child: Text('Cancel'),
                         ),
@@ -206,7 +223,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen>{
               ),
             ),
             padding: EdgeInsets.only(top: screenSize.height*0.05, left: screenSize.width*0.1, right: screenSize.width*0.1),
-            margin: new EdgeInsets.symmetric(vertical: screenSize.height*0.2),
+            margin: new EdgeInsets.symmetric(vertical: screenSize.height*0.2, horizontal: screenSize.width*0.05),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               border: Border.all(

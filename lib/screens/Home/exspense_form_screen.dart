@@ -108,8 +108,14 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen>{
                     },
                     items: _categories.map((Category map) {
                       return new DropdownMenuItem(
-                        value: Text(map.name),
-                        child: Icon(map.icon),
+                        value: map.icon,
+                        child: Row(
+                          children: [
+                            Icon(map.icon),
+                            SizedBox(width: screenSize.width* 0.05),
+                            Text(map.name)
+                          ]
+                        ),
                       );
                     }).toList(),
                   ),
@@ -129,6 +135,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen>{
                   ),
                   TextFormField(
                     controller: _amountInput,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                         labelText: "Amount",
                         hintText: "0",

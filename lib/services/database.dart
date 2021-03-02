@@ -12,7 +12,6 @@ class DatabaseService {
   //Table name
   static final transaction_db = 'Transaction';
   //Column name
-  static final transId = 'id';
   static final transType = 'type';
   static final transCategory = 'category';
   static final transDetail = 'detail';
@@ -39,7 +38,6 @@ class DatabaseService {
         await db.execute(
           '''
            CREATE TABLE ${transaction_db} (
-           ${transId}  INTEGER PRIMARY KEY,
            ${transType}  TEXT,
            ${transCategory}  TEXT,
            ${transDetail}  TEXT,
@@ -49,5 +47,17 @@ class DatabaseService {
         );
       }
     );
+  }
+
+  Future<int> inserttransaction(Map<String, dynamic> row) async {
+    final db = await database;
+    var insertResult = await db.rawInsert('INSERT into ${transaction_db} (type, categoru, detail, amount, date)  VALUES (?,?,?,?,?)', [
+      row['item']['type'],
+      row['item']['categoru'],
+      row['item']['detail'],
+      row['item']['amount'],
+      row['item']['date']]
+    );
+    return insertResult;
   }
 }

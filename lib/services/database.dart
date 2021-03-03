@@ -38,7 +38,7 @@ class DatabaseService {
         await db.execute(
           '''
            CREATE TABLE ${transaction_db} (
-           ${transType}  TEXT,
+           ${transType}  INTEGER,
            ${transCategory}  TEXT,
            ${transDetail}  TEXT,
            ${transAmount}   INTEGER,
@@ -49,14 +49,14 @@ class DatabaseService {
     );
   }
 
-  Future<int> inserttransaction(Map<String, dynamic> row) async {
+  Future<int> insertTransaction(int type, String category, String memo, int amount, String date) async {
     final db = await database;
     var insertResult = await db.rawInsert('INSERT into ${transaction_db} (type, categoru, detail, amount, date)  VALUES (?,?,?,?,?)', [
-      row['item']['type'],
-      row['item']['categoru'],
-      row['item']['detail'],
-      row['item']['amount'],
-      row['item']['date']]
+      type,
+      category,
+      memo,
+      amount,
+      date]
     );
     return insertResult;
   }

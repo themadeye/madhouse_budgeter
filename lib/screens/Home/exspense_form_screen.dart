@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:madhouse_budgeter/constants.dart';
 import 'package:madhouse_budgeter/model/transaction.dart';
 import 'package:madhouse_budgeter/model/category.dart';
+import 'package:madhouse_budgeter/services/database.dart';
 
 class ExpenseFormScreen extends StatefulWidget{
 
@@ -19,7 +20,8 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen>{
   final TextEditingController _memoInput = new TextEditingController();
   final TextEditingController _amountInput = new TextEditingController();
   final TextEditingController _dateInput = new TextEditingController();
-  IconData _dropdownValue;
+  String _dropdownValue;
+  String _dropdownName;
   List<Map> _myCategory = [{"icon":Icon(Icons.alarm),"name":"Alarm"},{"icon":Icon(Icons.ac_unit),"name":"AC Unit"}];
   List<Category> _categories = [
     Category('Food', Icons.food_bank_outlined),
@@ -108,7 +110,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen>{
                     },
                     items: _categories.map((Category map) {
                       return new DropdownMenuItem(
-                        value: map.icon,
+                        value: map.name,
                         child: Row(
                           children: [
                             Icon(map.icon),
@@ -201,15 +203,15 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen>{
                       Padding(
                         padding: EdgeInsets.only(top: screenSize.height*0.05),
                         child:ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             // Validate returns true if the form is valid, otherwise false.
                             if (_formKey.currentState.validate()) {
                               // If the form is valid, display a snackbar. In the real world,
                               // you'd often call a server or save the information in a database.
-
-                              Scaffold
-                                  .of(context)
-                                  .showSnackBar(SnackBar(content: Text('Processing Data')));
+                              Scaffold.of(context).showSnackBar(SnackBar(content: Text('Processing Data')));
+                              print("The Value : ${_dropdownValue}, ${_memoInput.text}, ${_amountInput.text}, ${_dateInput.text}");
+                              await DatabaseService.db.insertTransaction(1 ,_dropdownValue, _memoInput.text, int.parse(_amountInput.text), _dateInput.text);
+                              Scaffold.of(context).showSnackBar(SnackBar(content: Text('Done.... !!!!!')));
                             }
                           },
                           child: Text('Submit'),

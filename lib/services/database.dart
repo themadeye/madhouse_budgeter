@@ -10,9 +10,10 @@ class DatabaseService {
   DatabaseService._();
   static final DatabaseService db = DatabaseService._();
   //Table name
-  static final transaction_db = 'Transaction';
+  static final transaction_db = 'Transactions';
   //Column name
   static final transType = 'type';
+  static final transId = 'id';
   static final transCategory = 'category';
   static final transDetail = 'detail';
   static final transAmount = 'amount';
@@ -35,15 +36,26 @@ class DatabaseService {
       version: 1,
       onOpen: (db) {},
       onCreate: (Database db, int version) async {
+        // await db.execute(
+        //   '''
+        //   CREATE TABLE $transaction_db (
+        //   $transId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        //   $transType NUM,
+        //   $transCategory TEXT,
+        //   $transDetail TEXT,
+        //   $transAmount NUM,
+        //   $transDate TEXT
+        //   )
+        //   '''
+        // );
         await db.execute(
-          '''
-           CREATE TABLE ${transaction_db} (
-           ${transType}  INTEGER,
-           ${transCategory}  TEXT,
-           ${transDetail}  TEXT,
-           ${transAmount}   INTEGER,
-           ${transDate}  text ),
-          '''
+          "CREATE TABLE $transaction_db ("
+          "$transId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  ,"
+          "$transType INTEGER,"
+          "$transCategory TEXT,"
+          "$transDetail TEXT,"
+          "$transAmount INTEGER,"
+          "$transDate TEXT" ")"
         );
       }
     );
@@ -51,7 +63,7 @@ class DatabaseService {
 
   Future<int> insertTransaction(int type, String category, String memo, int amount, String date) async {
     final db = await database;
-    var insertResult = await db.rawInsert('INSERT into ${transaction_db} (type, categoru, detail, amount, date)  VALUES (?,?,?,?,?)', [
+    var insertResult = await db.rawInsert('INSERT into ${transaction_db} (type, category, detail, amount, date)  VALUES (?,?,?,?,?)', [
       type,
       category,
       memo,
@@ -59,5 +71,16 @@ class DatabaseService {
       date]
     );
     return insertResult;
+  }
+
+  Future<List<Transactions>> getAllTransactionByPeriod() async {
+    final db = await database;
+    List<Map> results = await db.query('${transaction_db}', columns: ['type', 'category', 'detail', 'amount', 'date'], orderBy: 'rowId DSC');
+    List<Transactions> trans = new List();
+    results.forEach((result) {
+      Transactions trs = Transactions.fromMap(result);
+      trans.add(trs);
+    });
+     return trans;
   }
 }

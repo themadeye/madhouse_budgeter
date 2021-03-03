@@ -1,4 +1,4 @@
-class Transaction {
+class Transactions {
   String type;
   String category;
   String detail;
@@ -6,12 +6,30 @@ class Transaction {
   String date;
   String icon;
 
-  Transaction({
+  Transactions(
     this.type ,
     this.category ,
     this.detail ,
     this.amount ,
     this.date ,
-    this.icon ,
-  });
+  );
+
+  Transactions.forDemo(
+    this.type ,
+    this.category ,
+    this.detail ,
+    this.amount ,
+    this.date ,
+    this.icon
+  );
+
+  factory Transactions.fromMap(Map<String, dynamic> data) {
+    return Transactions(
+      data['type'],
+      data['category'],
+      data['detail'],
+      data['amount'],
+      data['date'],
+    );
+  }
 }

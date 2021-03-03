@@ -12,12 +12,12 @@ class HomeScreen extends StatefulWidget{
 
 class _HomeScreenState extends State<HomeScreen>{
 
-  List<Transaction> transactions = [
-    Transaction(type: 'Income', category: 'Salary', detail: 'Monthly Salaray', amount: '6000', date: '2020-06-26', icon:'salary.png'),
-    Transaction(type: 'Expenses', category: 'Food', detail: 'Had Bugger King',amount: '350', date: '2020-06-26', icon:'food.png'),
-    Transaction(type: 'Expenses', category: 'Entertainment', detail: 'Avengers: End Game', amount: '150', date: '2020-06-27', icon:'entertainment.png'),
-    Transaction(type: 'Expenses', category: 'Shopping', detail: 'Bought PS4 games', amount: '400', date: '2020-06-27', icon:'shopping.png'),
-    Transaction(type: 'Expenses', category: 'Life Spend', detail: 'Bill', amount: '600', date: '2020-06-27', icon:'payment.png'),
+  List<Transactions> transactions = [
+    Transactions.forDemo('Income', 'Salary', 'Monthly Salaray', '6000', '2020-06-26', 'entertainment.png'),
+    Transactions.forDemo('Expenses', 'Food', 'Had Bugger King','350', '2020-06-26', 'food.png'),
+    Transactions.forDemo('Expenses', 'Entertainment', 'Avengers: End Game', '150', '2020-06-27', 'payment.png'),
+    Transactions.forDemo('Expenses', 'Shopping', 'Bought PS4 games', '400', '2020-06-27', 'salary.png'),
+    Transactions.forDemo('Expenses', 'Life Spend', 'Bill', '600', '2020-06-27', 'shopping.png'),
   ];
 
   @override

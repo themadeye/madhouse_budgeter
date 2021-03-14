@@ -75,7 +75,7 @@ class DatabaseService {
 
   Future<List<Transactions>> getAllTransactionByPeriod() async {
     final db = await database;
-    List<Map> results = await db.query('${transaction_db}', columns: ['type', 'category', 'detail', 'amount', 'date'], orderBy: 'rowId DSC');
+    List<Map> results = await db.query('${transaction_db}', columns: ['type', 'category', 'detail', 'amount', 'date']);
     List<Transactions> trans = new List();
     results.forEach((result) {
       Transactions trs = Transactions.fromMap(result);

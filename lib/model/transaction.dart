@@ -1,8 +1,8 @@
 class Transactions {
-  String type;
+  int type;
   String category;
   String detail;
-  String amount;
+  int amount;
   String date;
   String icon;
 

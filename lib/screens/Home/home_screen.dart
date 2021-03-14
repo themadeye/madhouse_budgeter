@@ -1,8 +1,14 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'package:madhouse_budgeter/constants.dart';
 import 'package:madhouse_budgeter/model/transaction.dart';
+import 'package:madhouse_budgeter/services/database.dart';
+import 'package:madhouse_budgeter/widgets/loading_widget.dart';
 
 class HomeScreen extends StatefulWidget{
 
@@ -11,18 +17,20 @@ class HomeScreen extends StatefulWidget{
 }
 
 class _HomeScreenState extends State<HomeScreen>{
-
+  bool loading = false;
   List<Transactions> transactions = [
-    Transactions.forDemo('Income', 'Salary', 'Monthly Salaray', '6000', '2020-06-26', 'entertainment.png'),
-    Transactions.forDemo('Expenses', 'Food', 'Had Bugger King','350', '2020-06-26', 'food.png'),
-    Transactions.forDemo('Expenses', 'Entertainment', 'Avengers: End Game', '150', '2020-06-27', 'payment.png'),
-    Transactions.forDemo('Expenses', 'Shopping', 'Bought PS4 games', '400', '2020-06-27', 'salary.png'),
-    Transactions.forDemo('Expenses', 'Life Spend', 'Bill', '600', '2020-06-27', 'shopping.png'),
+    Transactions.forDemo(1, 'Salary', 'Monthly Salaray', 6000, '2020-06-26', 'entertainment.png'),
+    Transactions.forDemo(0, 'Food', 'Had Bugger King',350, '2020-06-26', 'food.png'),
+    Transactions.forDemo(0, 'Entertainment', 'Avengers: End Game', 150, '2020-06-27', 'payment.png'),
+    Transactions.forDemo(0, 'Shopping', 'Bought PS4 games', 400, '2020-06-27', 'salary.png'),
+    Transactions.forDemo(0, 'Life Spend', 'Bill', 600, '2020-06-27', 'shopping.png'),
   ];
+
+  List<Transactions> _transactions;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return loading ? LoadingSpinner() : Container(
       color: MadhouseBudgeterTheme.nearlyWhite,
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -37,6 +45,24 @@ class _HomeScreenState extends State<HomeScreen>{
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    getTransactionList();
+
+  }
+
+  Future getTransactionList() async {
+    setState(() {
+      loading = true;
+    });
+    _transactions = await DatabaseService.db.getAllTransactionByPeriod();
+    print(_transactions);
+    setState(() {
+      loading = false;
+    });
+  }
+
   Widget getExpenseList(){
     double height = MediaQuery.of(context).size.height;
     print(height);
@@ -44,13 +70,13 @@ class _HomeScreenState extends State<HomeScreen>{
       height: 480.0,
       child: Scaffold(
         body: ListView.builder(
-          itemCount: transactions.length,
+          itemCount: _transactions == null ? 0 : _transactions.length,
           itemBuilder: (context, index){
             return Card(
               child: ListTile(
                 onTap: (){},
-                title: Text('${transactions[index].detail} - ${transactions[index].amount}'),
-                subtitle: Text('${transactions[index].date}'),
+                title: Text('${_transactions[index].detail} - ${_transactions[index].amount.toString()}'),
+                subtitle: Text('${_transactions[index].date}'),
                 leading: CircleAvatar(
                   backgroundImage: AssetImage('assets/${transactions[index].icon}'),
                 ),
